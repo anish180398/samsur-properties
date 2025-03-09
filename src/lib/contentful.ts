@@ -34,13 +34,13 @@ interface ContentfulProperty extends EntrySkeletonType {
     propertyType: 'Flat' | 'Plot' | 'Villa' | 'Commercial';
     purpose: 'Sale' | 'Resale' | 'Rental';
     size: number;
-    images: {
+    images: Array<{
       fields: {
         file: {
           url: string;
         };
       };
-    }[];
+    }>;
     features: string[];
     contactInfo: {
       name: string | null;
@@ -106,7 +106,10 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
     if (response.items.length > 0) {
       const item = response.items[0];
       console.log('Found property:', item.fields.title);
-      
+      // Ensure images is always an array
+      const images = Array.isArray(item.fields.images)
+        ? (item.fields.images as Array<{ fields: { file: { url: string; }; }; }>).map(img => `https:${img.fields.file.url}`)
+        : [];
       return {
         id: item.sys.id,
         title: item.fields.title as string,
@@ -117,15 +120,14 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
         propertyType: item.fields.propertyType as Property['propertyType'],
         purpose: item.fields.purpose as Property['purpose'],
         size: item.fields.size as number,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        images: (item.fields.images || []).map((img: { fields: { file: { url: any; }; }; }) => `https:${img.fields.file.url}`),
+        images: images,
         features: (item.fields.features || []) as string[],
         contactInfo: item.fields.contactInfo as Property['contactInfo'],
         isFeatured: !!item.fields.isFeatured,
         beds: item.fields.beds || 0,
         baths: item.fields.baths || 0,
         locationCoOrdinates: item.fields.locationCoOrdinates || ''
-      };
+      } as any;
     }
     
     console.log('No property found with slug:', slug);
@@ -139,6 +141,7 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
 export const getProperties = cache(async (query: ContentfulQueryOptions) => {
   try {
     const response = await client.getEntries<ContentfulProperty>(query);
+   
     return response.items.map(item => ({
       id: item.sys.id,
       title: item.fields.title,
@@ -149,7 +152,7 @@ export const getProperties = cache(async (query: ContentfulQueryOptions) => {
       propertyType: item.fields.propertyType,
       purpose: item.fields.purpose,
       size: item.fields.size,
-      images: (item.fields.images || []).map((img: { fields: { file: { url: any; }; }; }) => `https:${img.fields.file.url}`),
+      images: (item.fields.images as Array<{ fields: { file: { url: string; }; } }> ).map((img: any) => `https:${img.fields.file.url}`),
       features: item.fields.features || [],
       contactInfo: item.fields.contactInfo || { name: null, phone: null, email: null },
       isFeatured: item.fields.isFeatured || false,

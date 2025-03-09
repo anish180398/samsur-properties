@@ -1,9 +1,9 @@
 import { MetadataRoute } from 'next';
-import { getProperties } from '@/lib/contentful';
+import { getProperties, CONTENT_TYPES } from '@/lib/contentful';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.samsurproperties.com';
-  const properties = await getProperties();
+  const properties = await getProperties({ content_type: CONTENT_TYPES.PROPERTY });
 
   const propertyUrls = properties.map((property) => ({
     url: `${baseUrl}/properties/${property.id}`,

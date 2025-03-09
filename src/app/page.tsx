@@ -5,6 +5,7 @@ import FeaturedProperties from '@/components/home/FeaturedProperties';
 import Services from '@/components/home/Services';
 import PropertyCategories from '@/components/PropertyCategories';
 import Newsletter from '@/components/Newsletter';
+import { Suspense } from 'react';
 
 export const metadata = defaultMetadata;
 
@@ -21,16 +22,18 @@ export default async function Home() {
   const properties = await getProperties({ content_type: CONTENT_TYPES.PROPERTY });
 
   return (
-    <main className="min-h-screen">
-      <Hero />
-      <FeaturedProperties properties={featuredProperties} />
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <PropertyCategories properties={properties} />
-        </div>
-      </section>
-      <Services />
-      <Newsletter />
-    </main>
+    <Suspense fallback={<div>Loading...</div>}>
+      <main className="min-h-screen">
+        <Hero />
+        <FeaturedProperties properties={featuredProperties} />
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <PropertyCategories properties={properties} />
+          </div>
+        </section>
+        <Services />
+        <Newsletter />
+      </main>
+    </Suspense>
   );
 } 

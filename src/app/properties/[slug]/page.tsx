@@ -7,21 +7,19 @@ import PropertyDetails from '@/components/property/PropertyDetails';
 import PropertyContact from '@/components/property/PropertyContact';
 import PropertyMap from '@/components/PropertyMap';
 
-interface Props {
-  params: {
-    slug: string;
-  };
-}
-
 export const revalidate = 60;
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const property = await getPropertyBySlug(params.slug);
+type PageProps = {
+  params: { slug: string };
+  searchParams: Record<string, string | string[] | undefined>;
+};
+
+// Use async component pattern
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const property = await getPropertyBySlug(props.params.slug);
   
   if (!property) {
-    return {
-      title: 'Property Not Found | Samsur Properties',
-    };
+    return { title: 'Property Not Found | Samsur Properties' };
   }
 
   return {
@@ -30,8 +28,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function PropertyPage({ params }: Props) {
-  const property = await getPropertyBySlug(params.slug) as Property;
+// Use async component pattern
+export default async function PropertyPage(props: PageProps) {
+  const property = await getPropertyBySlug(props.params.slug) as Property;
 
   if (!property) {
     notFound();
@@ -58,4 +57,4 @@ export default async function PropertyPage({ params }: Props) {
       <PropertyContact contactInfo={property.contactInfo} />
     </div>
   );
-} 
+}

@@ -2,18 +2,10 @@ import { Metadata } from 'next';
 import { getProperties, CONTENT_TYPES, Property } from '@/lib/contentful';
 import PropertyCard from '@/components/PropertyCard';
 import PropertyFilters from '@/components/PropertyFilters';
-import { ReadonlyURLSearchParams } from 'next/navigation';
 
-interface Props {
-  searchParams: ReadonlyURLSearchParams | {
-    query?: string;
-    type?: string;
-    purpose?: string;
-    location?: string;
-    minPrice?: string;
-    maxPrice?: string;
-    sort?: string;
-  };
+interface PageProps {
+  params: { [key: string]: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
 interface QueryParams {
@@ -37,66 +29,48 @@ export const metadata: Metadata = {
   description: 'Browse our wide range of properties',
 };
 
-export default async function PropertiesPage({ searchParams }: Props) {
+export default async function PropertiesPage({ searchParams }: PageProps) {
   // Build the query object
   const query: QueryParams = {
     content_type: CONTENT_TYPES.PROPERTY,
   };
 
-  // Safely get search params
-  const searchQuery = searchParams instanceof URLSearchParams 
-    ? searchParams.get('query')
-    : searchParams.query;
-
-  const type = searchParams instanceof URLSearchParams 
-    ? searchParams.get('type')
-    : searchParams.type;
-
-  const purpose = searchParams instanceof URLSearchParams 
-    ? searchParams.get('purpose')
-    : searchParams.purpose;
-
-  const location = searchParams instanceof URLSearchParams 
-    ? searchParams.get('location')
-    : searchParams.location;
-
-  const minPrice = searchParams instanceof URLSearchParams 
-    ? searchParams.get('minPrice')
-    : searchParams.minPrice;
-
-  const maxPrice = searchParams instanceof URLSearchParams 
-    ? searchParams.get('maxPrice')
-    : searchParams.maxPrice;
-
-  const sort = searchParams instanceof URLSearchParams 
-    ? searchParams.get('sort')
-    : searchParams.sort;
+  // Get search params directly
+  const {
+    query: searchQuery,
+    type,
+    purpose,
+    location,
+    minPrice,
+    maxPrice,
+    sort
+  } = searchParams;
 
   if (searchQuery) {
-    query['fields.title[match]'] = searchQuery;
+    query['fields.title[match]'] = searchQuery as string;
   }
 
   if (type) {
-    query['fields.propertyType'] = type;
+    query['fields.propertyType'] = type as string;
   }
 
   if (purpose) {
-    query['fields.purpose'] = purpose;
+    query['fields.purpose'] = purpose as string;
   }
 
   if (location) {
-    query['fields.location[match]'] = location;
+    query['fields.location[match]'] = location as string;
   }
 
   if (minPrice) {
-    query['fields.price[gte]'] = parseInt(minPrice);
+    query['fields.price[gte]'] = parseInt(minPrice as string);
   }
 
   if (maxPrice) {
-    query['fields.price[lte]'] = parseInt(maxPrice);
+    query['fields.price[lte]'] = parseInt(maxPrice as string);
   }
 
-  const sortOrder = getSortOrder(sort);
+  const sortOrder = getSortOrder(sort as string | undefined);
   if (sortOrder) {
     query.order = sortOrder;
   }
