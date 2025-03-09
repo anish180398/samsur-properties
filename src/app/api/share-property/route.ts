@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
-import { getPropertyById } from '@/lib/contentful';
+import { getPropertyBySlug } from '@/lib/contentful';
 import { sendEmail } from '@/lib/email';
 
 export async function POST(request: Request) {
   try {
-    const { propertyId, email, propertyUrl } = await request.json();
+    const {slug, email, propertyUrl } = await request.json();
 
     // Validate inputs
-    if (!propertyId || !email || !propertyUrl) {
+    if (!slug || !email || !propertyUrl) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     }
 
     // Get property details
-    const property = await getPropertyById(propertyId);
+    const property = await getPropertyBySlug(slug);
     if (!property) {
       return NextResponse.json(
         { error: 'Property not found' },

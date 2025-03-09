@@ -23,6 +23,7 @@ export default function Newsletter() {
       
       setStatus('success');
       setEmail('');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setStatus('error');
     }

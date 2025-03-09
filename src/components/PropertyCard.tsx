@@ -1,9 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { formatCurrency, getLocationName, clearExpiredCache } from '@/utils/format';
+import { formatCurrency} from '@/utils/format';
 import { Property } from '@/types/contentful';
 import ShareProperty from './ShareProperty';
 import { 

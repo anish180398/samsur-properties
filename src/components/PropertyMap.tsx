@@ -16,7 +16,7 @@ interface Coordinates {
 
 const DEFAULT_COORDINATES = { lat: 17.385044, lng: 78.486671 }; // Hyderabad
 
-export default function PropertyMap({ address, coordinates, className }: PropertyMapProps) {
+export default function PropertyMap({  coordinates, className }: PropertyMapProps) {
   const [mapCoordinates, setMapCoordinates] = useState<Coordinates>(DEFAULT_COORDINATES);
 
   useEffect(() => {

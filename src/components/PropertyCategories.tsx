@@ -2,7 +2,7 @@
 
 import { Tab } from '@headlessui/react';
 import { Property } from '@/types/contentful';
-import PropertyCard, { PropertyCardSkeleton } from './PropertyCard';
+import PropertyCard from './PropertyCard';
 
 interface PropertyCategoriesProps {
   properties: Property[];

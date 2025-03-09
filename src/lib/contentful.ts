@@ -1,6 +1,6 @@
-import { createClient } from 'contentful';
+import { createClient, QueryOptions } from 'contentful';
 import { cache } from 'react';
-import type { EntrySkeletonType, Asset, Entry, EntryCollection, ChainModifiers } from 'contentful';
+import type { EntrySkeletonType, Asset,  AssetFile } from 'contentful';
 
 if (!process.env.CONTENTFUL_SPACE_ID) {
   throw new Error('CONTENTFUL_SPACE_ID is not defined');
@@ -21,11 +21,9 @@ export const CONTENT_TYPES = {
   SERVICE: 'service'
 } as const;
 
-interface ContentfulAsset extends Asset {
-  fields: {
-    file: {
-      url: string;
-    };
+interface ContentfulAssetFields {
+  file: AssetFile & {
+    url: string;
   };
 }
 
@@ -39,7 +37,13 @@ interface ContentfulProperty extends EntrySkeletonType {
     propertyType: 'Flat' | 'Plot' | 'Villa' | 'Commercial';
     purpose: 'Sale' | 'Resale' | 'Rental';
     size: number;
-    images: ContentfulAsset[];
+    images: {
+      fields: {
+        file: {
+          url: string;
+        };
+      };
+    }[];
     features: string[];
     contactInfo: {
       name: string | null;
@@ -47,10 +51,16 @@ interface ContentfulProperty extends EntrySkeletonType {
       email: string | null;
     };
     isFeatured: boolean;
+    beds: number;
+    baths: number;
+    locationCoOrdinates: string;
   };
 }
 
 export interface Property {
+  beds: number;
+  baths: number;
+  locationCoOrdinates: string;
   id: string;
   title: string;
   slug: string;
@@ -90,9 +100,9 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
     
     const response = await client.getEntries<ContentfulProperty>({
       content_type: CONTENT_TYPES.PROPERTY,
-      'fields.slug[match]': slug,
+      'sys.id': slug,
       limit: 1
-    });
+    } as QueryOptions<ContentfulProperty>);
 
     console.log('Response items:', response.items.length);
     
@@ -110,10 +120,14 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
         propertyType: item.fields.propertyType as Property['propertyType'],
         purpose: item.fields.purpose as Property['purpose'],
         size: item.fields.size as number,
-        images: (item.fields.images || []).map((img: ContentfulAsset) => `https:${img.fields.file.url}`),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        images: (item.fields.images || []).map((img: { fields: { file: { url: any; }; }; }) => `https:${img.fields.file.url}`),
         features: (item.fields.features || []) as string[],
         contactInfo: item.fields.contactInfo as Property['contactInfo'],
-        isFeatured: !!item.fields.isFeatured
+        isFeatured: !!item.fields.isFeatured,
+        beds: item.fields.beds || 0,
+        baths: item.fields.baths || 0,
+        locationCoOrdinates: item.fields.locationCoOrdinates || ''
       };
     }
     
@@ -138,10 +152,13 @@ export const getProperties = cache(async (query: ContentfulQueryOptions) => {
       propertyType: item.fields.propertyType,
       purpose: item.fields.purpose,
       size: item.fields.size,
-      images: (item.fields.images || []).map(img => `https:${(img as ContentfulAsset).fields.file.url}`),
+      images: (item.fields.images || []).map(img => `https:${img.fields.file.url}`),
       features: item.fields.features || [],
       contactInfo: item.fields.contactInfo || { name: null, phone: null, email: null },
-      isFeatured: item.fields.isFeatured || false
+      isFeatured: item.fields.isFeatured || false,
+      beds: item.fields.beds || 0,
+      baths: item.fields.baths || 0,
+      locationCoOrdinates: item.fields.locationCoOrdinates || ''
     }));
   } catch (error) {
     console.error('Error fetching properties:', error);

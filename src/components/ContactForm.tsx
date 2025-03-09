@@ -45,6 +45,7 @@ export default function ContactForm({ service, propertyId, className = '' }: Con
       
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', message: '' });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setStatus('error');
     }

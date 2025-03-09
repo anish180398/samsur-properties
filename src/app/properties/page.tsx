@@ -1,9 +1,8 @@
 import { Metadata } from 'next';
-import { getProperties, CONTENT_TYPES, ContentfulQuery } from '@/lib/contentful';
+import { getProperties, CONTENT_TYPES, Property } from '@/lib/contentful';
 import PropertyCard from '@/components/PropertyCard';
 import PropertyFilters from '@/components/PropertyFilters';
 import { ReadonlyURLSearchParams } from 'next/navigation';
-import { PropertyCardSkeleton } from '@/components/PropertyCard';
 
 interface Props {
   searchParams: ReadonlyURLSearchParams | {
@@ -114,8 +113,16 @@ export default async function PropertiesPage({ searchParams }: Props) {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {properties.length > 0 ? (
-          properties.map((property) => (
-            <PropertyCard key={property.id} property={property} />
+          properties.map((property: Property) => (
+            <PropertyCard 
+              key={property.id}
+              property={{
+                ...property,
+                beds: property.beds || 0,
+                baths: property.baths || 0,
+                locationCoOrdinates: property.locationCoOrdinates || ''
+              }} 
+            />
           ))
         ) : (
           // Show 6 skeleton cards when loading/no data

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createClient } from 'contentful';
 
 export const contentfulClient = createClient({
@@ -61,6 +62,7 @@ export async function getPropertyById(id: string): Promise<Property | null> {
       id: response.sys.id,
       ...response.fields as any,
     };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return null;
   }

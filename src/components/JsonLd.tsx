@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function PropertyJsonLd({ property }: { property: any }) {
   const jsonLd = {
     '@context': 'https://schema.org',
