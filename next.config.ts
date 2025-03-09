@@ -1,7 +1,18 @@
-import type { NextConfig } from "next";
+import { NextConfig } from 'next';
 
-const nextConfig: NextConfig = {
-  /* config options here */
+const config: NextConfig = {
+  images: {
+    remotePatterns: [{
+      protocol: 'https',
+      hostname: 'images.ctfassets.net',
+    }],
+  },
+  reactStrictMode: true,
+  // Suppress hydration warnings
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
+  }
 };
 
-export default nextConfig;
+export default config;
