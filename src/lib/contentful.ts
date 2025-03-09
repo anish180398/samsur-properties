@@ -1,6 +1,7 @@
-import { createClient, QueryOptions } from 'contentful';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { createClient } from 'contentful';
 import { cache } from 'react';
-import type { EntrySkeletonType, Asset,  AssetFile } from 'contentful';
+import type { EntrySkeletonType, Asset } from 'contentful';
 
 if (!process.env.CONTENTFUL_SPACE_ID) {
   throw new Error('CONTENTFUL_SPACE_ID is not defined');
@@ -21,11 +22,7 @@ export const CONTENT_TYPES = {
   SERVICE: 'service'
 } as const;
 
-interface ContentfulAssetFields {
-  file: AssetFile & {
-    url: string;
-  };
-}
+
 
 interface ContentfulProperty extends EntrySkeletonType {
   fields: {
@@ -100,9 +97,9 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
     
     const response = await client.getEntries<ContentfulProperty>({
       content_type: CONTENT_TYPES.PROPERTY,
-      'sys.id': slug,
+      'fields.slug': slug,
       limit: 1
-    } as QueryOptions<ContentfulProperty>);
+    } as any);
 
     console.log('Response items:', response.items.length);
     
@@ -152,7 +149,7 @@ export const getProperties = cache(async (query: ContentfulQueryOptions) => {
       propertyType: item.fields.propertyType,
       purpose: item.fields.purpose,
       size: item.fields.size,
-      images: (item.fields.images || []).map(img => `https:${img.fields.file.url}`),
+      images: (item.fields.images || []).map((img: { fields: { file: { url: any; }; }; }) => `https:${img.fields.file.url}`),
       features: item.fields.features || [],
       contactInfo: item.fields.contactInfo || { name: null, phone: null, email: null },
       isFeatured: item.fields.isFeatured || false,
