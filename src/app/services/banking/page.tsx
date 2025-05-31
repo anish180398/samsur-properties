@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { CheckCircleIcon } from '@heroicons/react/24/outline'; // Assuming Heroicons are available
 
 export const metadata: Metadata = {
   title: 'Banking Services | Samsur Properties',
@@ -8,60 +9,76 @@ export const metadata: Metadata = {
 
 export default function BankingServicesPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-6">Banking Services</h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">Our Banking Partners</h2>
-          <div className="grid gap-4">
-            {/* Add your banking partners here */}
-            <div className="p-4 border rounded-lg">
-              <h3 className="font-semibold">State Bank of India</h3>
-              <p className="text-gray-600">Home loans starting at 6.7% p.a.</p>
-            </div>
-            <div className="p-4 border rounded-lg">
-              <h3 className="font-semibold">HDFC Bank</h3>
-              <p className="text-gray-600">Special rates for premium customers</p>
-            </div>
-            {/* Add more banks as needed */}
-          </div>
+    <main className="min-h-screen bg-gray-100 py-16 mt-12">
+      <div className="container mx-auto px-4">
+        {/* Hero Section */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-4">Banking Services</h1>
+          <p className="text-xl text-gray-600">Your trusted partner for seamless property financing.</p>
         </div>
 
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">Loan Services</h2>
-          <div className="space-y-4">
-            <div className="p-4 bg-white rounded-lg shadow-md">
-              <h3 className="font-semibold mb-2">Home Loans</h3>
-              <ul className="list-disc list-inside text-gray-600">
-                <li>Competitive interest rates</li>
-                <li>Flexible repayment options</li>
-                <li>Quick approval process</li>
-                <li>Minimal documentation</li>
-              </ul>
-            </div>
-
-            <div className="p-4 bg-white rounded-lg shadow-md">
-              <h3 className="font-semibold mb-2">Property Financing</h3>
-              <ul className="list-disc list-inside text-gray-600">
-                <li>Construction financing</li>
-                <li>Land purchase loans</li>
-                <li>Property renovation loans</li>
-                <li>Balance transfer facility</li>
-              </ul>
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Banking Partners Section */}
+          <div className="lg:col-span-1">
+            <h2 className="text-2xl font-bold text-gray-700 mb-6">Our Banking Partners</h2>
+            <div className="grid gap-6">
+              {/* Add your banking partners here */}
+              <div className="bg-white p-6 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                <h3 className="text-xl font-semibold text-blue-700 mb-2">State Bank of India</h3>
+                <p className="text-gray-600">Home loans starting at <span className="font-bold">6.7% p.a.</span></p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                <h3 className="text-xl font-semibold text-red-700 mb-2">HDFC Bank</h3>
+                <p className="text-gray-600">Special rates for premium customers</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                <h3 className="text-xl font-semibold text-green-700 mb-2">ICICI Bank</h3> {/* Added another example */}
+                <p className="text-gray-600">Tailored financing solutions</p>
+              </div>
+              {/* Add more banks as needed */}
             </div>
           </div>
 
-          <div className="mt-6">
-            <Link 
-              href="/contact"
-              className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
-            >
-              Contact for Assistance
-            </Link>
+          {/* Loan Services Section */}
+          <div className="lg:col-span-2">
+            <h2 className="text-2xl font-bold text-gray-700 mb-6">Loan Services</h2>
+            <div className="space-y-8">
+              {/* Home Loans Card */}
+              <div className="bg-white p-8 rounded-lg shadow-lg">
+                <h3 className="text-2xl font-semibold text-gray-800 mb-4">Home Loans</h3>
+                <ul className="space-y-3 text-gray-700">
+                  <li className="flex items-start"><CheckCircleIcon className="h-6 w-6 text-green-500 mr-3 flex-shrink-0" /><span>Competitive interest rates</span></li>
+                  <li className="flex items-start"><CheckCircleIcon className="h-6 w-6 text-green-500 mr-3 flex-shrink-0" /><span>Flexible repayment options</span></li>
+                  <li className="flex items-start"><CheckCircleIcon className="h-6 w-6 text-green-500 mr-3 flex-shrink-0" /><span>Quick approval process</span></li>
+                  <li className="flex items-start"><CheckCircleIcon className="h-6 w-6 text-green-500 mr-3 flex-shrink-0" /><span>Minimal documentation</span></li>
+                </ul>
+              </div>
+
+              {/* Property Financing Card */}
+              <div className="bg-white p-8 rounded-lg shadow-lg">
+                <h3 className="text-2xl font-semibold text-gray-800 mb-4">Property Financing</h3>
+                <ul className="space-y-3 text-gray-700">
+                  <li className="flex items-start"><CheckCircleIcon className="h-6 w-6 text-green-500 mr-3 flex-shrink-0" /><span>Construction financing</span></li>
+                  <li className="flex items-start"><CheckCircleIcon className="h-6 w-6 text-green-500 mr-3 flex-shrink-0" /><span>Land purchase loans</span></li>
+                  <li className="flex items-start"><CheckCircleIcon className="h-6 w-6 text-green-500 mr-3 flex-shrink-0" /><span>Property renovation loans</span></li>
+                  <li className="flex items-start"><CheckCircleIcon className="h-6 w-6 text-green-500 mr-3 flex-shrink-0" /><span>Balance transfer facility</span></li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Contact Call to Action */}
+            <div className="mt-10 text-center lg:text-left">
+              <Link 
+                href="/contact"
+                className="inline-block bg-blue-600 text-white text-xl font-semibold px-8 py-4 rounded-lg shadow-lg hover:bg-blue-700 transition-colors duration-300"
+              >
+                Contact for Assistance
+              </Link>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 } 

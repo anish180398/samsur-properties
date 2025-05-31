@@ -35,7 +35,7 @@ export default async function Home() {
           </div>
         </section>
         <Services />
-        <Newsletter />
+        {/* <Newsletter /> */}
       </main>
     </Suspense>
   );

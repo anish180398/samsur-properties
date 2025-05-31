@@ -23,7 +23,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-2 text-xl font-bold ">
             <Image src={Logo} alt="Samsur Properties" width={75} height={75} />
-            <span className="text-xl font-medium text-blue-800">Samsur Properties</span>
+            <span className="text-xl font-medium text-blue-900">Samsur Properties</span>
           </Link>
 
           {/* Mobile menu button */}
@@ -55,10 +55,10 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`px-3 py-2 rounded-md text-sm font-medium ${
+                className={`px-3 py-2 text-md  ${
                   pathname === item.href
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-700 hover:bg-blue-50'
+                    ? ' text-black  border-b-2 border-black'
+                    : 'text-gray-500 font-normal hover:bg-black-50'
                 }`}
               >
                 {item.label}
