@@ -2,6 +2,7 @@
 import { createClient } from 'contentful';
 import { cache } from 'react';
 import type { EntrySkeletonType, Asset } from 'contentful';
+import type { Document } from '@contentful/rich-text-types';
 
 if (!process.env.CONTENTFUL_SPACE_ID) {
   throw new Error('CONTENTFUL_SPACE_ID is not defined');
@@ -28,7 +29,7 @@ interface ContentfulProperty extends EntrySkeletonType {
   fields: {
     title: string;
     slug: string;
-    description: string;
+    description: Document;
     price: number;
     location: string;
     propertyType: 'Flat' | 'Plot' | 'Villa' | 'Commercial';
@@ -61,7 +62,7 @@ export interface Property {
   id: string;
   title: string;
   slug: string;
-  description: string;
+  description: Document;
   price: number;
   location: string;
   propertyType: 'Flat' | 'Plot' | 'Villa' | 'Commercial';
@@ -94,33 +95,18 @@ interface ContentfulQueryOptions {
 export async function getPropertyBySlug(slug: string): Promise<Property | null> {
   try {
     console.log('Fetching property with slug:', slug);
-    console.log('Contentful Space ID:', process.env.CONTENTFUL_SPACE_ID);
-    console.log('Contentful Environment:', process.env.CONTENTFUL_ENVIRONMENT || 'master');
     
     const response = await client.getEntries<ContentfulProperty>({
       content_type: CONTENT_TYPES.PROPERTY,
       'fields.slug': slug,
-      limit: 1
+      limit: 1,
+      include: 2,
+      select: 'fields.description,fields.title,fields.slug,fields.price,fields.location,fields.propertyType,fields.purpose,fields.size,fields.images,fields.features,fields.contactInfo,fields.isFeatured,fields.beds,fields.baths,fields.locationCoOrdinates'
     } as any);
 
-    console.log('Contentful Response:', {
-      total: response.total,
-      items: response.items.length,
-      firstItem: response.items[0] ? {
-        id: response.items[0].sys.id,
-        title: response.items[0].fields.title,
-        slug: response.items[0].fields.slug
-      } : null
-    });
-    
     if (response.items.length > 0) {
       const item = response.items[0];
-      console.log('Found property:', {
-        id: item.sys.id,
-        title: item.fields.title,
-        slug: item.fields.slug,
-        images: Array.isArray(item.fields.images) ? item.fields.images.length : 0
-      });
+      console.log('Raw description from Contentful:', JSON.stringify(item.fields.description, null, 2));
 
       // Ensure images is always an array
       const images = Array.isArray(item.fields.images)
@@ -131,7 +117,7 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
         id: item.sys.id,
         title: item.fields.title as string,
         slug: item.fields.slug as string,
-        description: item.fields.description as string,
+        description: item.fields.description as Document,
         price: item.fields.price as number,
         location: item.fields.location as string,
         propertyType: item.fields.propertyType as Property['propertyType'],
@@ -146,33 +132,22 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
         locationCoOrdinates: item.fields.locationCoOrdinates || ''
       };
 
-      console.log('Processed property:', {
-        id: property.id,
-        title: property.title,
-        slug: property.slug,
-        images: property.images.length
-      });
-
       return property;
     }
     
-    console.log('No property found with slug:', slug);
     return null;
   } catch (error) {
     console.error('Error fetching property:', error);
-    if (error instanceof Error) {
-      console.error('Error details:', {
-        message: error.message,
-        stack: error.stack
-      });
-    }
     return null;
   }
 }
 
 export const getProperties = cache(async (query: ContentfulQueryOptions) => {
   try {
-    const response = await client.getEntries<ContentfulProperty>(query);
+    const response = await client.getEntries<ContentfulProperty>({
+      ...query,
+      include: 2
+    });
    
     return response.items.map(item => ({
       id: item.sys.id,

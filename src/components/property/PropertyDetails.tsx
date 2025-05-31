@@ -1,6 +1,7 @@
 import { Property } from '@/types/contentful';
 import { formatCurrency } from '@/utils/format';
 import Link from 'next/link';
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 
 interface PropertyDetailsProps {
   property: Property;
@@ -9,6 +10,49 @@ interface PropertyDetailsProps {
 export default function PropertyDetails({ property }: PropertyDetailsProps) {
   const showBedsAndBaths = property.propertyType === 'Flat';
   
+  // Safely convert Rich Text (or string) to HTML
+  const getDescriptionHtml = () => {
+    const description = property.description as unknown;
+
+    if (!description) return 'No description available';
+    
+    try {
+      // Check if it's a Rich Text document
+      if (typeof description === 'object' && description !== null && 'nodeType' in description && description.nodeType === 'document') {
+        return documentToHtmlString(description as any);
+      }
+      
+      // If it's a string, apply basic formatting
+      if (typeof description === 'string') {
+        let html = description;
+        // Replace __text__ with <strong>text</strong>
+        html = html.replace(/__(.*?)__/g, '<strong>$1</strong>');
+        // Replace • with list item, and handle newlines
+        html = html.split('\n').map(line => {
+          if (line.trim().startsWith('•')) {
+            return `<li>${line.trim().substring(1).trim()}</li>`;
+          } else {
+            return `<p>${line}</p>`;
+          }
+        }).join('');
+        
+        // Wrap list items in ul if they exist
+        if (html.includes('<li>')) {
+           html = `<ul>${html}</ul>`;
+        }
+
+        return html;
+      }
+      
+      return 'Invalid description format';
+    } catch (error) {
+      console.error('Error rendering description:', error);
+      return 'Error rendering description';
+    }
+  };
+
+  const descriptionHtml = getDescriptionHtml();
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm space-y-6">
       {/* Header */}
@@ -74,11 +118,13 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
       {/* Description */}
       <div>
         <h3 className="font-semibold mb-2">Description</h3>
-        <p className="text-gray-600">{property.description}</p>
+        <div 
+          className="text-gray-600 prose prose-sm max-w-none"
+          dangerouslySetInnerHTML={{ 
+            __html: descriptionHtml
+          }}
+        />
       </div>
-
-      {/* Features */}
-     
     </div>
   );
 } 

@@ -1,4 +1,4 @@
-import { Document } from '@contentful/rich-text-types';
+import type { Document } from '@contentful/rich-text-types';
 
 export interface Property {
   id: string;
@@ -6,7 +6,7 @@ export interface Property {
   slug: string;
   propertyType: 'Flat' | 'Plot' | 'Villa' | 'Commercial';
   purpose: 'Sale' | 'Resale' | 'Rental';
-  description: string;
+  description: Document| any;
   price: number;
   beds: number;
   baths: number;
