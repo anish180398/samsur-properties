@@ -80,7 +80,7 @@ export default async function PropertyPage(props: PageProps) {
     }
 
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-16 mt-12">
         <h1 className="text-3xl font-bold mb-6">{property.title}</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
