@@ -3,6 +3,9 @@ import { getProperties, CONTENT_TYPES, Property } from '@/lib/contentful';
 import PropertyCard from '@/components/PropertyCard';
 import PropertyFilters from '@/components/PropertyFilters';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
   params: { [key: string]: string };
   searchParams: { [key: string]: string | string[] | undefined };

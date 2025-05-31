@@ -9,6 +9,9 @@ import { Suspense } from 'react';
 
 export const metadata = defaultMetadata;
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const [featuredProperties] = await Promise.all([
     getProperties({ 
