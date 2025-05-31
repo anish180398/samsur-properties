@@ -68,8 +68,8 @@ export default function Footer() {
             <h4 className="text-lg font-semibold mb-4">Contact</h4>
             <ul className="space-y-2 text-gray-400">
               <li>
-                <a href="tel:+919876543210" className="hover:text-white">
-                  +91 98765 43210
+                <a href="tel:+919042000172" className="hover:text-white">
+                  +91 090420 00172
                 </a>
               </li>
               <li>
@@ -78,9 +78,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                123 Main Street,<br />
-                Bangalore, Karnataka<br />
-                India - 560001
+                4/15, G.S.T. Road, near Siva Sakthi Kalyana Mandapam, <br />West Tambaram, Irumbuliyur, Chennai, Tamil Nadu 600045
               </li>
             </ul>
           </div>

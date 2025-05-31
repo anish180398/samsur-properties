@@ -23,7 +23,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center gap-2 text-xl font-bold ">
             <Image src={Logo} alt="Samsur Properties" width={75} height={75} />
-            <span className="text-xl font-medium text-blue-900">Samsur Properties</span>
+            <span className="text-2xl font-sans font-bold text-blue-900">Samsur Properties</span>
           </Link>
 
           {/* Mobile menu button */}
