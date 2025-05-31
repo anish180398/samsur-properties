@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
@@ -16,6 +16,14 @@ export default function FullscreenImageViewer({
   onClose,
 }: FullscreenImageViewerProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
+
+  const goToPrevious = useCallback(() => {
+    setCurrentIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
+  }, [images.length]);
+
+  const goToNext = useCallback(() => {
+    setCurrentIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
+  }, [images.length]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -33,16 +41,7 @@ export default function FullscreenImageViewer({
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [goToPrevious, goToNext, onClose]); // Add onClose here
-
-  // Memoize goToPrevious and goToNext using useCallback
-  const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
-  };
-
-  const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
-  };
+  }, [goToPrevious, goToNext, onClose]);
 
   if (!images || images.length === 0) {
     return null;
