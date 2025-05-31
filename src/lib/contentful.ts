@@ -199,10 +199,16 @@ export const getServices = cache(async () => {
   try {
     const response = await client.getEntries<ContentfulService>({
       content_type: CONTENT_TYPES.SERVICE,
+      include: 2
     });
     return response.items.map(item => ({
       id: item.sys.id,
-      ...item.fields
+      title: item.fields.title,
+      slug: item.fields.slug,
+      description: item.fields.description,
+      icon: item.fields.icon as any,
+      features: item.fields.features || [],
+      content: item.fields.content as Document
     }));
   } catch (error) {
     console.error('Error fetching services:', error);

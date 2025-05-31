@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description: 'Home loans and property financing services',
 };
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export default function BankingServicesPage() {
   return (
     <main className="min-h-screen bg-gray-100 py-16 mt-12">
