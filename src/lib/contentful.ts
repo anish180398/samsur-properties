@@ -94,6 +94,8 @@ interface ContentfulQueryOptions {
 export async function getPropertyBySlug(slug: string): Promise<Property | null> {
   try {
     console.log('Fetching property with slug:', slug);
+    console.log('Contentful Space ID:', process.env.CONTENTFUL_SPACE_ID);
+    console.log('Contentful Environment:', process.env.CONTENTFUL_ENVIRONMENT || 'master');
     
     const response = await client.getEntries<ContentfulProperty>({
       content_type: CONTENT_TYPES.PROPERTY,
@@ -101,16 +103,31 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
       limit: 1
     } as any);
 
-    console.log('Response items:', response.items.length);
+    console.log('Contentful Response:', {
+      total: response.total,
+      items: response.items.length,
+      firstItem: response.items[0] ? {
+        id: response.items[0].sys.id,
+        title: response.items[0].fields.title,
+        slug: response.items[0].fields.slug
+      } : null
+    });
     
     if (response.items.length > 0) {
       const item = response.items[0];
-      console.log('Found property:', item.fields.title);
+      console.log('Found property:', {
+        id: item.sys.id,
+        title: item.fields.title,
+        slug: item.fields.slug,
+        images: Array.isArray(item.fields.images) ? item.fields.images.length : 0
+      });
+
       // Ensure images is always an array
       const images = Array.isArray(item.fields.images)
         ? (item.fields.images as Array<{ fields: { file: { url: string; }; }; }>).map(img => `https:${img.fields.file.url}`)
         : [];
-      return {
+
+      const property = {
         id: item.sys.id,
         title: item.fields.title as string,
         slug: item.fields.slug as string,
@@ -127,13 +144,28 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
         beds: item.fields.beds || 0,
         baths: item.fields.baths || 0,
         locationCoOrdinates: item.fields.locationCoOrdinates || ''
-      } as any;
+      };
+
+      console.log('Processed property:', {
+        id: property.id,
+        title: property.title,
+        slug: property.slug,
+        images: property.images.length
+      });
+
+      return property;
     }
     
     console.log('No property found with slug:', slug);
     return null;
   } catch (error) {
     console.error('Error fetching property:', error);
+    if (error instanceof Error) {
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack
+      });
+    }
     return null;
   }
 }
