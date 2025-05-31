@@ -6,6 +6,7 @@ import PropertyImages from '@/components/property/PropertyImages';
 import PropertyDetails from '@/components/property/PropertyDetails';
 import PropertyContact from '@/components/property/PropertyContact';
 import PropertyMap from '@/components/PropertyMap';
+import { documentToPlainTextString } from '@contentful/rich-text-plain-text-renderer';
 
 // Disable static generation for this route
 export const dynamic = 'force-dynamic';
@@ -27,12 +28,18 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
       };
     }
 
+    const plainTextDescription = property.description 
+      ? typeof property.description === 'string' 
+        ? property.description 
+        : documentToPlainTextString(property.description) 
+      : `View details about ${property.title} at Samsur Properties.`;
+
     return {
       title: `${property.title} | Samsur Properties`,
-      description: property.description || `View details about ${property.title} at Samsur Properties.`,
+      description: plainTextDescription,
       openGraph: {
         title: property.title,
-        description: property.description,
+        description: plainTextDescription,
         images: property.images[0] ? [property.images[0]] : [],
       },
     };
