@@ -77,7 +77,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
           <MapPinIcon className="h-5 w-5 text-red-600" />
           <span className="text-gray-600 text-sm font-bold">{property.location}</span>
         </div>
-
+        <h3 className='text-base font-semibold'>{property.title}</h3>
         {/* Property details */}
         <div className="flex gap-4 text-sm">
           <div className="flex items-center gap-2">
@@ -86,7 +86,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
           </div>
           <div className="flex items-center gap-2">
             <Square3Stack3DIcon className="h-4 w-4 text-gray-600" />
-            <span>{property.size} sq.ft</span>
+            <span className='whitespace-nowrap'>{property.size} sq.ft</span>
           </div>
           <div className="flex items-center gap-2">
             <BanknotesIcon className="h-4 w-4 text-gray-600" />

@@ -37,8 +37,8 @@ export default function ContactPage() {
                 </p>
                 <p>
                   <strong>Email:</strong>{' '}
-                  <a href="mailto:info@samsurproperties.com" className="text-blue-600 hover:text-blue-800">
-                    info@samsurproperties.com
+                  <a href="mailto:samsurproperties@gmail.com" className="text-blue-600 hover:text-blue-800">
+                    samsurproperties@gmail.com
                   </a>
                 </p>
               </div>

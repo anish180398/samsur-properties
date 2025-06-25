@@ -47,7 +47,7 @@ export function OrganizationJsonLd() {
       '@type': 'ContactPoint',
       telephone: '+919876543210',
       contactType: 'sales',
-      email: 'info@samsurproperties.com'
+      email: 'samsurproperties@gmail.com'
     }
   };
 

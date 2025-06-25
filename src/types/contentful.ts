@@ -14,6 +14,7 @@ export interface Property {
   locationCoOrdinates: string;
   size: number;
   images: string[];
+  videoLink?: string;
   features: string[];
   contactInfo: {
     name: string | null;

@@ -6,6 +6,7 @@ import PropertyImages from '@/components/property/PropertyImages';
 import PropertyDetails from '@/components/property/PropertyDetails';
 import PropertyContact from '@/components/property/PropertyContact';
 import PropertyMap from '@/components/PropertyMap';
+import PropertyVideo from '@/components/property/PropertyVideo';
 import { documentToPlainTextString } from '@contentful/rich-text-plain-text-renderer';
 
 // Disable static generation for this route
@@ -84,9 +85,15 @@ export default async function PropertyPage(props: PageProps) {
         <h1 className="text-3xl font-bold mb-6">{property.title}</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <PropertyImages images={property.images} title={property.title} />
+          <div className='flex flex-col gap-4'>   <PropertyImages images={property.images} title={property.title} />
+          {property.videoLink && (
+          <PropertyVideo videoLink={property.videoLink} title={property.title} />
+        )}</div>
+        
           <PropertyDetails property={property} />
         </div>
+
+       
 
         {property.locationCoOrdinates && (
           <div className="mb-8">

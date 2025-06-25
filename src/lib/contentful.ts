@@ -52,6 +52,7 @@ interface ContentfulProperty extends EntrySkeletonType {
     beds: number;
     baths: number;
     locationCoOrdinates: string;
+    videoLink?: string;
   };
 }
 
@@ -76,6 +77,7 @@ export interface Property {
     email: string | null;
   };
   isFeatured: boolean;
+  videoLink?: string;
 }
 
 interface ContentfulQueryOptions {
@@ -101,7 +103,7 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
       'fields.slug': slug,
       limit: 1,
       include: 2,
-      select: 'fields.description,fields.title,fields.slug,fields.price,fields.location,fields.propertyType,fields.purpose,fields.size,fields.images,fields.features,fields.contactInfo,fields.isFeatured,fields.beds,fields.baths,fields.locationCoOrdinates'
+      select: 'fields.description,fields.title,fields.slug,fields.price,fields.location,fields.propertyType,fields.purpose,fields.size,fields.images,fields.features,fields.contactInfo,fields.isFeatured,fields.beds,fields.baths,fields.locationCoOrdinates,fields.videoLink'
     } as any);
 
     if (response.items.length > 0) {
@@ -129,7 +131,8 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
         isFeatured: !!item.fields.isFeatured,
         beds: item.fields.beds || 0,
         baths: item.fields.baths || 0,
-        locationCoOrdinates: item.fields.locationCoOrdinates || ''
+        locationCoOrdinates: item.fields.locationCoOrdinates || '',
+        videoLink: item.fields.videoLink || undefined
       };
 
       return property;
@@ -165,7 +168,8 @@ export const getProperties = cache(async (query: ContentfulQueryOptions) => {
       isFeatured: item.fields.isFeatured || false,
       beds: item.fields.beds || 0,
       baths: item.fields.baths || 0,
-      locationCoOrdinates: item.fields.locationCoOrdinates || ''
+      locationCoOrdinates: item.fields.locationCoOrdinates || '',
+      videoLink: item.fields.videoLink || undefined
     }));
   } catch (error) {
     console.error('Error fetching properties:', error);

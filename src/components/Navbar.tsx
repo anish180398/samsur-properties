@@ -15,6 +15,7 @@ export default function Navbar() {
     { href: '/properties', label: 'Properties' },
     { href: '/services/solar-installation', label: 'Solar Installation' },
     { href: '/services/banking', label: 'Banking Services' },
+    { href: '/contact', label: 'Contact Us' },
   ];
 
   return (

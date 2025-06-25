@@ -15,7 +15,7 @@ export default function ShareProperty({ property }: SharePropertyProps) {
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
   const propertyUrl = typeof window !== 'undefined' 
-    ? `${window.location.origin}/properties/${property.id}`
+    ? `${window.location.origin}/properties/${property.slug}`
     : '';
 
   const handleCopy = async () => {
