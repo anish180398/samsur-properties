@@ -4,10 +4,10 @@ import { sendEmail, emailTemplates } from '@/lib/email-aws';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, phone, message, service, propertyId } = body;
+    const { name, email, phone, interest } = body;
 
     // Validate the request
-    if (!name || !email || !phone || !message) {
+    if (!name || !email || !phone || !interest) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -32,17 +32,15 @@ export async function POST(request: Request) {
       );
     }
 
-    const contactData = {
+    const leadData = {
       name: name.trim(),
       email: email.trim().toLowerCase(),
       phone: phone.trim(),
-      message: message.trim(),
-      service: service?.trim(),
-      propertyId: propertyId?.trim(),
+      interest: interest.trim(),
     };
 
     // Generate email template
-    const template = emailTemplates.contactForm(contactData);
+    const template = emailTemplates.ctaPopup(leadData);
 
     // Send email to admin/sales team
     await sendEmail({
@@ -52,9 +50,9 @@ export async function POST(request: Request) {
       text: template.text,
     });
 
-    // Log the contact form submission
-    console.log('Contact form submission:', {
-      ...contactData,
+    // Log the lead for tracking
+    console.log('CTA Lead submission:', {
+      ...leadData,
       timestamp: new Date().toISOString(),
       userAgent: request.headers.get('user-agent'),
       ip: request.headers.get('x-forwarded-for') || 'unknown',
@@ -62,18 +60,18 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       { 
-        message: 'Message sent successfully',
-        contactId: `CONTACT_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        message: 'Lead submitted successfully',
+        leadId: `CTA_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error('Error processing contact form:', error);
+    console.error('Error processing CTA lead:', error);
     
     // Return a user-friendly error message
     if (error instanceof Error && error.message.includes('Email')) {
       return NextResponse.json(
-        { error: 'Failed to send message. Please try again or contact us directly.' },
+        { error: 'Failed to send notification. Please try again or contact us directly.' },
         { status: 500 }
       );
     }

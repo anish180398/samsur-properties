@@ -5,6 +5,7 @@ import FeaturedProperties from '@/components/home/FeaturedProperties';
 import Services from '@/components/home/Services';
 import PropertyCategories from '@/components/PropertyCategories';
 import Newsletter from '@/components/Newsletter';
+import CTAPopup from '@/components/CTAPopup';
 import { Suspense } from 'react';
 
 export const metadata = defaultMetadata;
@@ -36,6 +37,9 @@ export default async function Home() {
         </section>
         <Services />
         {/* <Newsletter /> */}
+        
+        {/* CTA Popup - shows once per session after 10 seconds */}
+        <CTAPopup delay={10} />
       </main>
     </Suspense>
   );

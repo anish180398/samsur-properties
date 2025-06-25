@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getPropertyBySlug } from '@/lib/contentful';
-import { sendEmail } from '@/lib/email';
+import { sendEmail } from '@/lib/email-aws';
 
 export async function POST(request: Request) {
   try {
