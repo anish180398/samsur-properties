@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
-import { getProperties, CONTENT_TYPES, Property } from '@/lib/contentful';
+import { getProperties, CONTENT_TYPES } from '@/lib/contentful';
+import { Property } from '@/types/contentful';
 import PropertyCard from '@/components/PropertyCard';
 import PropertyFilters from '@/components/PropertyFilters';
 

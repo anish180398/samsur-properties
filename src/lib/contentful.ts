@@ -3,6 +3,7 @@ import { createClient } from 'contentful';
 import { cache } from 'react';
 import type { EntrySkeletonType, Asset } from 'contentful';
 import type { Document } from '@contentful/rich-text-types';
+import type { Property } from '@/types/contentful';
 
 if (!process.env.CONTENTFUL_SPACE_ID) {
   throw new Error('CONTENTFUL_SPACE_ID is not defined');
@@ -52,30 +53,6 @@ interface ContentfulProperty extends EntrySkeletonType {
     locationCoOrdinates: string;
     videoLink?: string;
   };
-}
-
-export interface Property {
-  beds: number;
-  baths: number;
-  locationCoOrdinates: string;
-  id: string;
-  title: string;
-  slug: string;
-  description: Document | null;
-  price: number;
-  location: string;
-  propertyType: 'Flat' | 'Plot' | 'Villa' | 'Commercial';
-  purpose: 'Sale' | 'Resale' | 'Rental';
-  size: number;
-  images: string[];
-  features: string[];
-  contactInfo: {
-    name: string | null;
-    phone: string | null;
-    email: string | null;
-  };
-  isFeatured: boolean;
-  videoLink?: string;
 }
 
 interface ContentfulQueryOptions {
