@@ -11,7 +11,7 @@ import {
   Square3Stack3DIcon,
   BanknotesIcon 
 } from '@heroicons/react/24/outline';
-
+import defaultProperty from '@/assets/defualt-property.jpg';
 interface PropertyCardProps {
   property: Property;
 }
@@ -61,7 +61,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow w-[320px]">
       <div className="relative h-48">
         <Image
-          src={property.images[0]}
+          src={property.images[0]||defaultProperty}
           alt={property.title}
           fill
           className="object-cover"
