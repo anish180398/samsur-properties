@@ -251,7 +251,7 @@ All components are fully responsive:
 
 For technical support:
 - **Email**: tech@samsurproperties.com
-- **Phone**: +91 090420 00172
+- **Phone**: +91 90420 00172 / +91 9087886786
 - **Documentation**: This file + code comments
 
 ---

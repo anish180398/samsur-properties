@@ -143,7 +143,7 @@ export default function ContactForm({ service, propertyId, className = '' }: Con
               </svg>
               <p className="text-red-800 font-medium">Failed to send message</p>
             </div>
-            <p className="text-red-700 text-sm mt-1">Please try again or call us at +91 090420 00172</p>
+            <p className="text-red-700 text-sm mt-1">Please try again or call us at +91 90420 00172 / +91 9087886786</p>
           </div>
         )}
       </div>

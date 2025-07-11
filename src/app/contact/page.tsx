@@ -32,7 +32,7 @@ export default function ContactPage() {
                 <p>
                   <strong>Phone:</strong>{' '}
                   <a href="tel:+919042000172" className="text-blue-600 hover:text-blue-800">
-                 +91 090420 00172
+                 +91 90420 00172 / +91 9087886786
                   </a>
                 </p>
                 <p>
@@ -48,7 +48,7 @@ export default function ContactPage() {
           <div className="mt-6 bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-4">Business Hours</h3>
             <ul className="space-y-2 text-gray-600">
-              <li>Monday - Sunday: 9:00 AM - 6:00 PM</li>
+              <li>Monday - Sunday: 9:00 AM - 10:00 PM</li>
             </ul>
           </div>
         </div>

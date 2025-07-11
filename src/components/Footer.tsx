@@ -69,7 +69,7 @@ export default function Footer() {
             <ul className="space-y-2 text-gray-400">
               <li>
                 <a href="tel:+919042000172" className="hover:text-white">
-                  +91 090420 00172
+                  +91 90420 00172 / +91 9087886786
                 </a>
               </li>
               <li>

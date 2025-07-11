@@ -96,7 +96,7 @@ interface ContentfulQueryOptions {
 
 export async function getPropertyBySlug(slug: string): Promise<Property | null> {
   try {
-    console.log('Fetching property with slug:', slug);
+    console.log('🔍 Fetching property with slug:', slug);
     
     const response = await client.getEntries<ContentfulProperty>({
       content_type: CONTENT_TYPES.PROPERTY,
@@ -106,15 +106,34 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
       select: 'fields.description,fields.title,fields.slug,fields.price,fields.location,fields.propertyType,fields.purpose,fields.size,fields.images,fields.features,fields.contactInfo,fields.isFeatured,fields.beds,fields.baths,fields.locationCoOrdinates,fields.videoLink'
     } as any);
 
+    console.log('📡 Contentful response:', {
+      total: response.total,
+      items: response.items.length,
+      slug
+    });
+
     if (response.items.length > 0) {
       const item = response.items[0];
-      console.log('Raw description from Contentful:', JSON.stringify(item.fields.description, null, 2));
+      
+      // Log available fields for debugging
+      console.log('📋 Available fields:', Object.keys(item.fields));
+      
+      // Check for missing required fields
+      const requiredFields = ['title', 'slug', 'description', 'price', 'location', 'propertyType', 'purpose', 'size'];
+      const missingFields = requiredFields.filter(field => !item.fields[field]);
+      
+      if (missingFields.length > 0) {
+        console.warn('⚠️ Missing required fields:', missingFields);
+      }
 
-      // Ensure images is always an array
+      // Safely handle images
       const images = Array.isArray(item.fields.images)
-        ? (item.fields.images as Array<{ fields: { file: { url: string; }; }; }>).map(img => `https:${img.fields.file.url}`)
+        ? (item.fields.images as Array<{ fields: { file: { url: string; }; }; }>)
+            .filter(img => img?.fields?.file?.url)
+            .map(img => `https:${img.fields.file.url}`)
         : [];
 
+      // Safe property transformation with fallbacks
       const property = {
         id: item.sys.id,
         title: item.fields.title as string,
@@ -127,7 +146,7 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
         size: item.fields.size as number,
         images: images,
         features: (item.fields.features || []) as string[],
-        contactInfo: item.fields.contactInfo as Property['contactInfo'],
+        contactInfo: item.fields.contactInfo || { name: null, phone: null, email: null },
         isFeatured: !!item.fields.isFeatured,
         beds: item.fields.beds || 0,
         baths: item.fields.baths || 0,
@@ -135,49 +154,80 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
         videoLink: item.fields.videoLink || undefined
       };
 
+      console.log('✅ Property transformed successfully:', property.title);
       return property;
     }
     
+    console.log('❌ No property found with slug:', slug);
     return null;
   } catch (error) {
-    console.error('Error fetching property:', error);
+    console.error('❌ Error fetching property:', error);
     return null;
   }
 }
 
 export const getProperties = cache(async (query: ContentfulQueryOptions) => {
   try {
+    console.log('🔍 Fetching properties with query:', query);
+    
     const response = await client.getEntries<ContentfulProperty>({
       ...query,
       include: 2
     });
+
+    console.log('📡 Contentful response:', {
+      total: response.total,
+      items: response.items.length,
+      query
+    });
    
-    return response.items.map(item => ({
-      id: item.sys.id,
-      title: item.fields.title,
-      slug: item.fields.slug,
-      description: item.fields.description,
-      price: item.fields.price,
-      location: item.fields.location,
-      propertyType: item.fields.propertyType,
-      purpose: item.fields.purpose,
-      size: item.fields.size,
-      images: (item.fields.images as Array<{ fields: { file: { url: string; }; } }> ).map((img: any) => `https:${img.fields.file.url}`),
-      features: item.fields.features || [],
-      contactInfo: item.fields.contactInfo || { name: null, phone: null, email: null },
-      isFeatured: item.fields.isFeatured || false,
-      beds: item.fields.beds || 0,
-      baths: item.fields.baths || 0,
-      locationCoOrdinates: item.fields.locationCoOrdinates || '',
-      videoLink: item.fields.videoLink || undefined
-    }));
+    const properties = response.items.map((item, index) => {
+      try {
+        // Log available fields for debugging
+        console.log(`📋 Property ${index + 1} fields:`, Object.keys(item.fields));
+        
+        // Safely handle images
+        const images = Array.isArray(item.fields.images)
+          ? (item.fields.images as Array<{ fields: { file: { url: string; }; } }>)
+              .filter(img => img?.fields?.file?.url)
+              .map(img => `https:${img.fields.file.url}`)
+          : [];
+
+        return {
+          id: item.sys.id,
+          title: item.fields.title || 'Untitled Property',
+          slug: item.fields.slug || '',
+          description: item.fields.description || null,
+          price: item.fields.price || 0,
+          location: item.fields.location || 'Location not specified',
+          propertyType: item.fields.propertyType || 'Flat',
+          purpose: item.fields.purpose || 'Sale',
+          size: item.fields.size || 0,
+          images: images,
+          features: item.fields.features || [],
+          contactInfo: item.fields.contactInfo || { name: null, phone: null, email: null },
+          isFeatured: item.fields.isFeatured || false,
+          beds: item.fields.beds || 0,
+          baths: item.fields.baths || 0,
+          locationCoOrdinates: item.fields.locationCoOrdinates || '',
+          videoLink: item.fields.videoLink || undefined
+        };
+      } catch (error) {
+        console.error(`❌ Error processing property ${index + 1}:`, error);
+        return null;
+      }
+    }).filter(Boolean); // Remove null entries
+
+    console.log('✅ Properties processed successfully:', properties.length);
+    return properties;
   } catch (error) {
-    console.error('Error fetching properties:', error);
+    console.error('❌ Error fetching properties:', error);
     return [];
   }
 });
 
 export const getFeaturedProperties = cache(async () => {
+  console.log('🔍 Fetching featured properties...');
   return getProperties({ 
     content_type: CONTENT_TYPES.PROPERTY,
     'fields.isFeatured': true, 
@@ -201,11 +251,19 @@ export interface ContentfulService extends EntrySkeletonType {
 
 export const getServices = cache(async () => {
   try {
+    console.log('🔍 Fetching services...');
+    
     const response = await client.getEntries<ContentfulService>({
       content_type: CONTENT_TYPES.SERVICE,
       include: 2
     });
-    return response.items.map(item => ({
+
+    console.log('📡 Services response:', {
+      total: response.total,
+      items: response.items.length
+    });
+
+    const services = response.items.map(item => ({
       id: item.sys.id,
       title: item.fields.title,
       slug: item.fields.slug,
@@ -214,8 +272,11 @@ export const getServices = cache(async () => {
       features: item.fields.features || [],
       content: item.fields.content as Document
     }));
+
+    console.log('✅ Services processed successfully:', services.length);
+    return services;
   } catch (error) {
-    console.error('Error fetching services:', error);
+    console.error('❌ Error fetching services:', error);
     return [];
   }
 }); 

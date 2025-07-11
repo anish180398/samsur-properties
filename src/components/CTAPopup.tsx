@@ -111,7 +111,7 @@ export default function CTAPopup({ delay = 10 }: CTAPopupProps) {
                 Our property expert will contact you within 1 hour with personalized recommendations.
               </p>
               <div className="text-sm text-gray-500">
-                <p>📞 Call us now: <strong>+91 090420 00172</strong></p>
+                <p>📞 Call us now: <strong>+91 90420 00172 / +91 9087886786</strong></p>
               </div>
             </div>
           ) : (

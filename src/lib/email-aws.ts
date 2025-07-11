@@ -188,7 +188,7 @@ Samsur Properties - Lead Management System
         
         <div style="margin-top: 30px; text-align: center; color: #6b7280; font-size: 14px;">
           <p>Samsur Properties - Your trusted partner in real estate</p>
-          <p>📞 +91 090420 00172 | ✉️ samsurproperties@gmail.com</p>
+          <p>📞 +91 90420 00172 / +91 9087886786 | ✉️ samsurproperties@gmail.com</p>
         </div>
       </div>
     `,
@@ -203,7 +203,7 @@ Thank you for subscribing! You'll receive updates on:
 
 Visit: https://www.samsurproperties.com/properties
 
-Contact: +91 090420 00172 | samsurproperties@gmail.com
+Contact: +91 90420 00172 / +91 9087886786 | samsurproperties@gmail.com
     `,
   }),
 }; 
