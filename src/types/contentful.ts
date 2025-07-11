@@ -6,7 +6,7 @@ export interface Property {
   slug: string;
   propertyType: 'Flat' | 'Plot' | 'Villa' | 'Commercial';
   purpose: 'Sale' | 'Resale' | 'Rental';
-  description: Document| any;
+  description: Document | null;
   price: number;
   beds: number;
   baths: number;

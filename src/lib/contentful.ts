@@ -23,8 +23,6 @@ export const CONTENT_TYPES = {
   SERVICE: 'service'
 } as const;
 
-
-
 interface ContentfulProperty extends EntrySkeletonType {
   fields: {
     title: string;
@@ -63,7 +61,7 @@ export interface Property {
   id: string;
   title: string;
   slug: string;
-  description: Document;
+  description: Document | null;
   price: number;
   location: string;
   propertyType: 'Flat' | 'Plot' | 'Villa' | 'Commercial';
@@ -118,12 +116,10 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
       // Log available fields for debugging
       console.log('📋 Available fields:', Object.keys(item.fields));
       
-      // Check for missing required fields
-      const requiredFields = ['title', 'slug', 'description', 'price', 'location', 'propertyType', 'purpose', 'size'];
-      const missingFields = requiredFields.filter(field => !item.fields[field]);
-      
-      if (missingFields.length > 0) {
-        console.warn('⚠️ Missing required fields:', missingFields);
+      // Check for missing core fields
+      if (!item.fields.title || !item.fields.slug) {
+        console.warn('⚠️ Missing core fields (title/slug)');
+        return null;
       }
 
       // Safely handle images
@@ -134,7 +130,7 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
         : [];
 
       // Safe property transformation with fallbacks
-      const property = {
+      const property: Property = {
         id: item.sys.id,
         title: item.fields.title as string,
         slug: item.fields.slug as string,
@@ -166,7 +162,7 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
   }
 }
 
-export const getProperties = cache(async (query: ContentfulQueryOptions) => {
+export const getProperties = cache(async (query: ContentfulQueryOptions): Promise<Property[]> => {
   try {
     console.log('🔍 Fetching properties with query:', query);
     
@@ -180,11 +176,17 @@ export const getProperties = cache(async (query: ContentfulQueryOptions) => {
       items: response.items.length,
       query
     });
-   
-    const properties = response.items.map((item, index) => {
+    
+    const properties: Property[] = response.items.map((item, index) => {
       try {
         // Log available fields for debugging
         console.log(`📋 Property ${index + 1} fields:`, Object.keys(item.fields));
+        
+        // Skip items without core fields
+        if (!item.fields.title || !item.fields.slug) {
+          console.warn(`⚠️ Property ${index + 1} missing core fields, skipping`);
+          throw new Error('Missing core fields');
+        }
         
         // Safely handle images
         const images = Array.isArray(item.fields.images)
@@ -193,7 +195,7 @@ export const getProperties = cache(async (query: ContentfulQueryOptions) => {
               .map(img => `https:${img.fields.file.url}`)
           : [];
 
-        return {
+        const property: Property = {
           id: item.sys.id,
           title: item.fields.title || 'Untitled Property',
           slug: item.fields.slug || '',
@@ -212,11 +214,32 @@ export const getProperties = cache(async (query: ContentfulQueryOptions) => {
           locationCoOrdinates: item.fields.locationCoOrdinates || '',
           videoLink: item.fields.videoLink || undefined
         };
+
+        return property;
       } catch (error) {
         console.error(`❌ Error processing property ${index + 1}:`, error);
-        return null;
+        // Return a fallback property instead of null
+        return {
+          id: item.sys.id || 'unknown',
+          title: 'Property Error',
+          slug: 'property-error',
+          description: null,
+          price: 0,
+          location: 'Unknown',
+          propertyType: 'Flat' as const,
+          purpose: 'Sale' as const,
+          size: 0,
+          images: [],
+          features: [],
+          contactInfo: { name: null, phone: null, email: null },
+          isFeatured: false,
+          beds: 0,
+          baths: 0,
+          locationCoOrdinates: '',
+          videoLink: undefined
+        };
       }
-    }).filter(Boolean); // Remove null entries
+    });
 
     console.log('✅ Properties processed successfully:', properties.length);
     return properties;
@@ -226,7 +249,7 @@ export const getProperties = cache(async (query: ContentfulQueryOptions) => {
   }
 });
 
-export const getFeaturedProperties = cache(async () => {
+export const getFeaturedProperties = cache(async (): Promise<Property[]> => {
   console.log('🔍 Fetching featured properties...');
   return getProperties({ 
     content_type: CONTENT_TYPES.PROPERTY,
@@ -249,7 +272,23 @@ export interface ContentfulService extends EntrySkeletonType {
   };
 }
 
-export const getServices = cache(async () => {
+export interface Service {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  icon?: {
+    fields: {
+      file: {
+        url: string;
+      };
+    };
+  };
+  features?: string[];
+  content: Document;
+}
+
+export const getServices = cache(async (): Promise<Service[]> => {
   try {
     console.log('🔍 Fetching services...');
     
@@ -263,7 +302,7 @@ export const getServices = cache(async () => {
       items: response.items.length
     });
 
-    const services = response.items.map(item => ({
+    const services: Service[] = response.items.map(item => ({
       id: item.sys.id,
       title: item.fields.title,
       slug: item.fields.slug,
