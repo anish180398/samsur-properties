@@ -37,10 +37,13 @@ export default function PropertySearch() {
     if (filters.propertyType) params.set('type', filters.propertyType);
     if (filters.purpose) params.set('purpose', filters.purpose);
     if (filters.location) params.set('location', filters.location);
-    if (filters.priceRange.min) params.set('minPrice', filters.priceRange.min.toString());
-    if (filters.priceRange.max) params.set('maxPrice', filters.priceRange.max.toString());
+    if (filters.priceRange.min > 0) params.set('minPrice', filters.priceRange.min.toString());
+    if (filters.priceRange.max > 0) params.set('maxPrice', filters.priceRange.max.toString());
 
-    router.push(`/properties?${params.toString()}`);
+    const url = `/properties?${params.toString()}`;
+    console.log('Search filters:', filters);
+    console.log('Generated URL:', url);
+    router.push(url);
   };
 
   return (
@@ -60,10 +63,10 @@ export default function PropertySearch() {
           onChange={(e) => setFilters({ ...filters, propertyType: e.target.value })}
         >
           <option value="">Property Type</option>
-          <option value="flat">Flats</option>
-          <option value="plot">Plots</option>
-          <option value="villa">Independent Villas</option>
-          <option value="commercial">Commercial Spaces</option>
+          <option value="Flat">Flats</option>
+          <option value="Plot">Plots</option>
+          <option value="Villa">Independent Villas</option>
+          <option value="Commercial">Commercial Spaces</option>
         </select>
 
         <select
@@ -72,9 +75,9 @@ export default function PropertySearch() {
           onChange={(e) => setFilters({ ...filters, purpose: e.target.value })}
         >
           <option value="">Purpose</option>
-          <option value="buy">Buy</option>
-          <option value="sell">Sell</option>
-          <option value="resale">Resale</option>
+          <option value="Sale">Sale</option>
+          <option value="Resale">Resale</option>
+          <option value="Rental">Rental</option>
         </select>
 
         <input

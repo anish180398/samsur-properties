@@ -89,7 +89,7 @@ export default async function PropertiesPage({ searchParams }: PageProps) {
         <PropertyFilters />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
         {properties.length > 0 ? (
           properties.map((property: Property) => (
             <PropertyCard 
