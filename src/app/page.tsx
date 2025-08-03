@@ -4,7 +4,6 @@ import Hero from '@/components/home/Hero';
 import FeaturedProperties from '@/components/home/FeaturedProperties';
 import Services from '@/components/home/Services';
 import PropertyCategories from '@/components/PropertyCategories';
-import Newsletter from '@/components/Newsletter';
 import CTAPopup from '@/components/CTAPopup';
 import { Suspense } from 'react';
 
@@ -25,19 +24,23 @@ export default async function Home() {
 
   const properties = await getProperties({ content_type: CONTENT_TYPES.PROPERTY });
 
+  // Debug logging
+  console.log('Home: Total properties fetched:', properties.length);
+  console.log('Home: Featured properties:', featuredProperties.length);
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <main className="min-h-screen">
         <Hero />
         <FeaturedProperties properties={featuredProperties} />
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <PropertyCategories properties={properties} />
-          </div>
-        </section>
+        {properties && properties.length > 0 && (
+          <section className="py-16 bg-gray-50">
+            <div className="container mx-auto px-4">
+              <PropertyCategories properties={properties} />
+            </div>
+          </section>
+        )}
         <Services />
-        {/* <Newsletter /> */}
-        
         {/* CTA Popup - shows once per session after 10 seconds */}
         <CTAPopup delay={10} />
       </main>
