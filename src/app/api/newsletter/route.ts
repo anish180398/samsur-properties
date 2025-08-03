@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
     // Notify admin about new subscription
     await sendEmail({
-      to: process.env.ADMIN_EMAIL || 'samsurproperties@gmail.com',
+      to: process.env.ADMIN_EMAIL || 'samad@samsurproperties.in',
       subject: `New Newsletter Subscription`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">

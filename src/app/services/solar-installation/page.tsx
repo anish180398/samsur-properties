@@ -2,9 +2,15 @@ import { Metadata } from 'next';
 import ContactForm from '@/components/ContactForm';
 
 export const metadata: Metadata = {
-  title: 'Solar Installation Services | Samsur Properties',
-  description: 'Expert solar panel installation services since 1998. Get sustainable energy solutions with 100% client satisfaction guarantee.',
-  keywords: ['solar installation', 'solar panels', 'renewable energy', 'solar power', 'Chennai solar', 'sustainable energy'],
+  title: 'Solar Installation Services | Expert Solar Panel Installation | Samsur Properties',
+  description: 'Expert solar panel installation services since 1998. Get sustainable energy solutions with 100% client satisfaction guarantee. Professional installation, maintenance, and consultation services in Chennai.',
+  keywords: ['solar installation', 'solar panels', 'renewable energy', 'solar power', 'Chennai solar', 'sustainable energy', 'solar panel installation', 'solar consultancy', 'green energy'],
+  openGraph: {
+    title: 'Solar Installation Services - Expert Solar Panel Installation',
+    description: 'Expert solar panel installation services since 1998 with 100% client satisfaction guarantee.',
+    url: 'https://www.samsurproperties.com/services/solar-installation',
+    type: 'website',
+  },
 };
 
 export default function SolarInstallationPage() {

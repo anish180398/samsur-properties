@@ -33,20 +33,20 @@ export default function PropertyCategories({ properties = [] }: PropertyCategori
   // State to track how many properties to show for each category
   const [displayCounts, setDisplayCounts] = useState<Record<string, number>>({});
 
-  // Debug logging
-  console.log('PropertyCategories: Received properties:', properties.length);
-  console.log('PropertyCategories: Properties:', properties);
-
-  // Monitor state changes
+  // Monitor state changes for development
   useEffect(() => {
-    console.log('PropertyCategories: displayCounts state changed:', displayCounts);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('PropertyCategories: displayCounts state changed:', displayCounts);
+    }
   }, [displayCounts]);
 
   const getPropertiesByTypeAndPurpose = (type: Property['propertyType'], purpose: Property['purpose']) => {
     const filtered = (properties || [])
       .filter(property => property.propertyType === type && property.purpose === purpose);
     
-    console.log(`PropertyCategories: ${type} - ${purpose}:`, filtered.length, 'total properties');
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`PropertyCategories: ${type} - ${purpose}:`, filtered.length, 'total properties');
+    }
     return filtered;
   };
 
@@ -55,13 +55,18 @@ export default function PropertyCategories({ properties = [] }: PropertyCategori
   };
 
   const loadMore = (categoryKey: string) => {
-    console.log(`Loading more for category: ${categoryKey}`);
-    console.log('Current display counts:', displayCounts);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`Loading more for category: ${categoryKey}`);
+      console.log('Current display counts:', displayCounts);
+    }
     
     setDisplayCounts(prev => {
       const currentCount = prev[categoryKey] || INITIAL_DISPLAY_COUNT;
       const newCount = currentCount + LOAD_MORE_COUNT;
-      console.log(`Updating ${categoryKey} from ${currentCount} to ${newCount}`);
+      
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`Updating ${categoryKey} from ${currentCount} to ${newCount}`);
+      }
       
       return {
         ...prev,
@@ -76,21 +81,29 @@ export default function PropertyCategories({ properties = [] }: PropertyCategori
       const categoryProperties = getPropertiesByTypeAndPurpose(category.type, purpose.id);
       return categoryProperties.length > 0;
     });
-    console.log(`PropertyCategories: Purpose ${purpose.id} has properties:`, hasProperties);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`PropertyCategories: Purpose ${purpose.id} has properties:`, hasProperties);
+    }
     return hasProperties;
   });
 
-  console.log('PropertyCategories: Available purposes:', availablePurposes.length);
+  if (process.env.NODE_ENV === 'development') {
+    console.log('PropertyCategories: Available purposes:', availablePurposes.length);
+  }
 
   // If no purposes have properties, don't render anything
   if (availablePurposes.length === 0) {
-    console.log('PropertyCategories: No purposes have properties, returning null');
+    if (process.env.NODE_ENV === 'development') {
+      console.log('PropertyCategories: No purposes have properties, returning null');
+    }
     return null;
   }
 
   // If no properties at all, don't render anything
   if (!properties || properties.length === 0) {
-    console.log('PropertyCategories: No properties provided, returning null');
+    if (process.env.NODE_ENV === 'development') {
+      console.log('PropertyCategories: No properties provided, returning null');
+    }
     return null;
   }
 
@@ -171,7 +184,9 @@ export default function PropertyCategories({ properties = [] }: PropertyCategori
                   return categoryProperties.length > 0;
                 });
 
-                console.log(`PropertyCategories: Tab ${purpose} has ${availableCategories.length} available categories`);
+                if (process.env.NODE_ENV === 'development') {
+                  console.log(`PropertyCategories: Tab ${purpose} has ${availableCategories.length} available categories`);
+                }
 
                 return (
                   <Tab.Panel 
@@ -186,13 +201,15 @@ export default function PropertyCategories({ properties = [] }: PropertyCategori
                         const displayedProperties = allCategoryProperties.slice(0, currentDisplayCount);
                         const hasMoreProperties = allCategoryProperties.length > currentDisplayCount;
 
-                        console.log(`Category ${categoryKey}:`, {
-                          total: allCategoryProperties.length,
-                          displaying: currentDisplayCount,
-                          actuallyShowing: displayedProperties.length,
-                          hasMore: hasMoreProperties,
-                          remaining: Math.max(0, allCategoryProperties.length - currentDisplayCount)
-                        });
+                        if (process.env.NODE_ENV === 'development') {
+                          console.log(`Category ${categoryKey}:`, {
+                            total: allCategoryProperties.length,
+                            displaying: currentDisplayCount,
+                            actuallyShowing: displayedProperties.length,
+                            hasMore: hasMoreProperties,
+                            remaining: Math.max(0, allCategoryProperties.length - currentDisplayCount)
+                          });
+                        }
 
                         return (
                           <div 
@@ -275,7 +292,9 @@ export default function PropertyCategories({ properties = [] }: PropertyCategori
                                         <button
                                           onClick={(e) => {
                                             e.preventDefault();
-                                            console.log(`Load more clicked for: ${categoryKey}`);
+                                            if (process.env.NODE_ENV === 'development') {
+                                              console.log(`Load more clicked for: ${categoryKey}`);
+                                            }
                                             loadMore(categoryKey);
                                           }}
                                           className="relative group/loadmore transform-gpu hover:scale-105 transition-all duration-300"

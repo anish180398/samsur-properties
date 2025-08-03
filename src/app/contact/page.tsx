@@ -2,8 +2,15 @@ import { Metadata } from 'next';
 import ContactForm from '@/components/ContactForm';
 
 export const metadata: Metadata = {
-  title: 'Contact Us',
-  description: 'Get in touch with Samsur Properties for all your real estate needs.',
+  title: 'Contact Us | Samsur Properties',
+  description: 'Get in touch with Samsur Properties for all your real estate needs. Call +91 90420 00172 / +91 9087886786 or email us at info@samsurproperties.com',
+  keywords: ['contact samsur properties', 'real estate contact', 'property enquiry', 'Chennai real estate contact', 'property consultation'],
+  openGraph: {
+    title: 'Contact Samsur Properties',
+    description: 'Get in touch with Samsur Properties for all your real estate needs. Professional property consultation and services.',
+    url: 'https://www.samsurproperties.com/contact',
+    type: 'website',
+  },
 };
 
 export default function ContactPage() {

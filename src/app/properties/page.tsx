@@ -30,8 +30,15 @@ function getSortOrder(sort: string | null | undefined): string {
 }
 
 export const metadata: Metadata = {
-  title: 'Properties | Samsur Properties',
-  description: 'Browse our wide range of properties',
+  title: 'Properties | Browse Flats, Plots, Villas & Commercial Spaces | Samsur Properties',
+  description: 'Explore our comprehensive collection of premium properties in Chennai. Find flats, plots, villas, and commercial spaces for sale, resale, and rental. Browse through verified listings with detailed information.',
+  keywords: ['properties Chennai', 'flats for sale', 'plots for sale', 'villas for sale', 'commercial spaces', 'property rental', 'Chennai real estate', 'residential properties', 'property listing'],
+  openGraph: {
+    title: 'Properties - Browse Flats, Plots, Villas & Commercial Spaces',
+    description: 'Explore our comprehensive collection of premium properties in Chennai. Find your perfect home or investment opportunity.',
+    url: 'https://www.samsurproperties.com/properties',
+    type: 'website',
+  },
 };
 
 export default async function PropertiesPage({ searchParams }: PageProps) {

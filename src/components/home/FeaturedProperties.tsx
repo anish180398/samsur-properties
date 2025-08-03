@@ -132,25 +132,7 @@ export default function FeaturedProperties({ properties }: FeaturedPropertiesPro
         </div>
       </div>
   
-      {/* Enhanced View More Button */}
-      <div className="text-center mt-16">
-        <div className="relative inline-block group">
-          {/* Button glow */}
-          <div className="absolute -inset-2 bg-gradient-to-r from-blue-600/30 via-purple-600/30 to-emerald-600/30 rounded-2xl opacity-50 group-hover:opacity-100 blur-xl transition-all duration-500" />
-          
-          <button className="relative px-12 py-4 bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 text-white font-bold text-lg rounded-xl shadow-2xl transform-gpu group-hover:scale-105 group-hover:translate-y-[-2px] transition-all duration-300 border border-white/20 backdrop-blur-sm">
-            {/* Inner highlight */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent rounded-xl" />
-            
-            <span className="relative z-10 flex items-center gap-3">
-              View All Properties
-              <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </span>
-          </button>
-        </div>
-      </div>
+     
     </div>
   
     <style jsx>{`

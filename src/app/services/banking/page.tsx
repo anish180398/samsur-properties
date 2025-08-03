@@ -3,8 +3,15 @@ import Link from 'next/link';
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
 
 export const metadata: Metadata = {
-  title: 'Banking Services | Samsur Properties',
-  description: 'Home loans and property financing services',
+  title: 'Banking Services | Home Loans & Property Financing | Samsur Properties',
+  description: 'Get the best home loans and property financing services through Samsur Properties. Partner banks include SBI, HDFC, ICICI, and more with competitive interest rates starting from 6.7% p.a.',
+  keywords: ['home loans', 'property financing', 'mortgage loans', 'banking services', 'Chennai home loans', 'property loans', 'SBI home loans', 'HDFC loans'],
+  openGraph: {
+    title: 'Banking Services - Home Loans & Property Financing',
+    description: 'Get the best home loans and property financing services through Samsur Properties with competitive interest rates.',
+    url: 'https://www.samsurproperties.com/services/banking',
+    type: 'website',
+  },
 };
 
 export const dynamic = 'force-dynamic';

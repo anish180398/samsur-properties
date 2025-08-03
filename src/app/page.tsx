@@ -24,9 +24,11 @@ export default async function Home() {
 
   const properties = await getProperties({ content_type: CONTENT_TYPES.PROPERTY });
 
-  // Debug logging
-  console.log('Home: Total properties fetched:', properties.length);
-  console.log('Home: Featured properties:', featuredProperties.length);
+  // Debug logging for development
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Home: Total properties fetched:', properties.length);
+    console.log('Home: Featured properties:', featuredProperties.length);
+  }
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

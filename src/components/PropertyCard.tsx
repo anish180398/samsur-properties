@@ -127,7 +127,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
           
           {/* Title with 3D text effect */}
           <div className="relative">
-            <h3 className="text-lg font-bold min-h-[3.5rem] overflow-hidden bg-gradient-to-r from-slate-800 via-blue-600 to-purple-600 bg-clip-text text-transparent leading-tight" 
+            <h3 className="text-lg font-bold h-auto overflow-hidden text-black leading-tight" 
                 style={{
                   display: '-webkit-box',
                   WebkitLineClamp: 2,
