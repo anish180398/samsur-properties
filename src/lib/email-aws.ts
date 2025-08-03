@@ -20,7 +20,7 @@ export async function sendEmail({ to, subject, html, text }: EmailOptions) {
   const toAddresses = Array.isArray(to) ? to : [to];
   
   const params = {
-    Source: process.env.AWS_SES_FROM_EMAIL!,
+    Source: process.env.AWS_SES_FROM_EMAIL || 'info@reignofvision.com',
     Destination: {
       ToAddresses: toAddresses,
     },
@@ -88,7 +88,8 @@ export const emailTemplates = {
         
         <div style="margin-top: 20px; padding: 15px; background-color: #eff6ff; border-radius: 8px;">
           <p style="margin: 0; color: #1e40af; font-size: 14px;">
-            <strong>Samsur Properties</strong> - Contact Management System
+            <strong>Samsur Properties</strong> - Contact Management System<br>
+            Sent from: info@reignofvision.com
           </p>
         </div>
       </div>
@@ -107,6 +108,7 @@ ${data.message}
 
 ---
 Samsur Properties - Contact Management System
+Sent from: info@reignofvision.com
     `,
   }),
 

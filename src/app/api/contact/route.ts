@@ -44,9 +44,9 @@ export async function POST(request: Request) {
     // Generate email template
     const template = emailTemplates.contactForm(contactData);
 
-    // Send email to admin/sales team
+    // Send email to samad@samsurproperties.in
     await sendEmail({
-      to: process.env.ADMIN_EMAIL || 'samsurproperties@gmail.com',
+      to: 'samad@samsurproperties.in',
       subject: template.subject,
       html: template.html,
       text: template.text,
