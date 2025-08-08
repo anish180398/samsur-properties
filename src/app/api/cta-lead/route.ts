@@ -44,7 +44,7 @@ export async function POST(request: Request) {
 
     // Send email to admin/sales team
     await sendEmail({
-      to: process.env.ADMIN_EMAIL || 'samad@samsurproperties.in',
+      to: process.env.ADMIN_EMAIL || 'samsurproperties@gmail.com',
       subject: template.subject,
       html: template.html,
       text: template.text,

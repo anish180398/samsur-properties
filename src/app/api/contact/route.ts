@@ -46,7 +46,7 @@ export async function POST(request: Request) {
 
     // Send email to samad@samsurproperties.in
     await sendEmail({
-      to: 'samad@samsurproperties.in',
+      to: 'samsurproperties@gmail.com',
       subject: template.subject,
       html: template.html,
       text: template.text,
