@@ -39,7 +39,7 @@ export default function ShareProperty({ property }: SharePropertyProps) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          propertyId: property.id,
+          slug: property.slug,
           email,
           propertyUrl,
         }),
